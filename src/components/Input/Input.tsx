@@ -1,8 +1,9 @@
 'use client'
-import { ChangeEvent, FormEvent, MouseEvent, useState } from 'react'
+import { ChangeEvent, FormEvent, MouseEvent, useCallback, useState } from 'react'
 
 import styled from "styled-components"
 import { InputProps } from "./Input.types"
+import { Unit } from '@/types'
 
 const InputContainer = styled.form`
   display: flex;
@@ -30,25 +31,37 @@ const SubmitButton = styled.button`
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 `
 
+const LocationSearchButton = styled.button`
+   all: unset;
+  background-color: blue;
+  border-radius: 5px;
+  cursor: pointer;
+  padding: 10px;
+  color: white;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+`
+
 const Input = ({ onSubmit }: InputProps) => {
   const [inputValue, setInputValue] = useState<string>('')
+  const [unit, setUnit] = useState<Unit>('metric')
 
-  const handleInput = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleInput = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value)
-  }
+  }, [])
 
   // TODO: add event type
-  const handleSubmit = (e: any) => {
+  const handleSubmit = useCallback((e: any) => {
     e.preventDefault()
     // TODO: add unit to onSubmit
-    onSubmit(inputValue)
+    onSubmit(inputValue, unit)
     setInputValue('')
-  }
+  }, [unit])
 
   return (
     <InputContainer onSubmit={handleSubmit}>
       <InputArea placeholder="Please type in city name .." value={inputValue} onChange={handleInput} />
       <SubmitButton onClick={handleSubmit} type="submit">Search</SubmitButton>
+      {/* <LocationSearchButton>TODO allow location search</LocationSearchButton> */}
     </InputContainer>
   )
 }
