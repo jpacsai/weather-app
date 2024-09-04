@@ -61,7 +61,8 @@ const Input = ({ onSubmit }: InputProps) => {
     <InputContainer onSubmit={handleSubmit}>
       <InputArea placeholder="Please type in city name .." value={inputValue} onChange={handleInput} />
       <SubmitButton onClick={handleSubmit} type="submit">Search</SubmitButton>
-      {/* <LocationSearchButton>TODO allow location search</LocationSearchButton> */}
+      {/* // TODO: <LocationSearchButton>TODO allow location search</LocationSearchButton> */}
+      {/* // TODO: switch component for unit selection */}
     </InputContainer>
   )
 }
