@@ -55,7 +55,7 @@ const Input = ({ onSubmit }: InputProps) => {
     // TODO: add unit to onSubmit
     onSubmit(inputValue, unit)
     setInputValue('')
-  }, [unit])
+  }, [inputValue, unit, onSubmit])
 
   return (
     <InputContainer onSubmit={handleSubmit}>
