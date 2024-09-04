@@ -21,7 +21,8 @@ const CloseIcon = styled.div`
 const Error = ({ error }: ErrorProps) => {
   const [isOpen, setIsOpen] = useState(!!error)
 
-  if (!error || !isOpen) return;
+  // TODO: fix close logic
+  if (!error) return;
   return (
     <ErrorContainer>
       <div>{error}</div>
