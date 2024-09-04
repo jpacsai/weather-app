@@ -2,8 +2,7 @@ import styled from "styled-components"
 import { ErrorProps } from "./Error.types"
 import { useState } from "react"
 
-const ErrorContainer = styled.div<{ isOpen: boolean }>`
-  display: ${({ isOpen }) => (isOpen ? 'flex' : 'none')};
+const ErrorContainer = styled.div`
   background-color: red;
   padding: 20px;
   color: white;
@@ -22,9 +21,9 @@ const CloseIcon = styled.div`
 const Error = ({ error }: ErrorProps) => {
   const [isOpen, setIsOpen] = useState(!!error)
 
-  if (!isOpen) return;
+  if (!error || !isOpen) return;
   return (
-    <ErrorContainer isOpen={isOpen}>
+    <ErrorContainer>
       <div>{error}</div>
       <CloseIcon onClick={() => setIsOpen(false)}>X</CloseIcon>
     </ErrorContainer>)
