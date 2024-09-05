@@ -1,5 +1,5 @@
 import { AxiosErrorWeather, Unit, WeatherData } from '@/types';
-import axios, { AxiosError } from 'axios';
+import axios from 'axios';
 import { useCallback, useMemo, useState } from 'react';
 
 const key = '2f69cc6a582d4d8fb00205327240409';
