@@ -1,6 +1,6 @@
 import styled from "styled-components"
 import { ErrorProps } from "./Error.types"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 const ErrorContainer = styled.div`
   background-color: red;
@@ -21,11 +21,14 @@ const CloseIcon = styled.div`
 const Error = ({ error }: ErrorProps) => {
   const [isOpen, setIsOpen] = useState(!!error)
 
-  // TODO: fix close logic
-  if (!error) return;
+  useEffect(() => {
+    setIsOpen(!!error)
+  }, [error]);
+
+  if (!isOpen) return;
   return (
     <ErrorContainer>
-      <div>{error}</div>
+      <span>{error}</span>
       <CloseIcon onClick={() => setIsOpen(false)}>X</CloseIcon>
     </ErrorContainer>)
 }

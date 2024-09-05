@@ -28,6 +28,7 @@ export const useWeatherData = () => {
 	const [error, setError] = useState<string | null>(null);
 
 	const fetch = useCallback(async (q: string, unit: Unit = 'metric') => {
+		setError(null);
 		setIsLoading(true);
 		const { data: response } = await axios
 			.get<ApiResponse>('http://api.weatherapi.com/v1/current.json', { params: { q, key } })
@@ -42,6 +43,7 @@ export const useWeatherData = () => {
 			return setData(null);
 		}
 
+		setError(null);
 		setData({
 			localTime: new Date(response.location.localtime),
 			cityName: response.location.name,
