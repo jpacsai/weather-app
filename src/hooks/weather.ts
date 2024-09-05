@@ -1,4 +1,4 @@
-import { Unit, WeatherData } from '@/types';
+import { AxiosErrorWeather, Unit, WeatherData } from '@/types';
 import axios, { AxiosError } from 'axios';
 import { useCallback, useMemo, useState } from 'react';
 
@@ -32,9 +32,9 @@ export const useWeatherData = () => {
 		setIsLoading(true);
 		const { data: response } = await axios
 			.get<ApiResponse>('http://api.weatherapi.com/v1/current.json', { params: { q, key } })
-			.catch((error: AxiosError) => {
-				// TODO: accurate error handling
-				setError('Cannot fetch weather data');
+			.catch((error: AxiosErrorWeather) => {
+				const errorMessage = error.response.data.error.message;
+				setError(errorMessage);
 				return { data: null };
 			})
 			.finally(() => setIsLoading(false));

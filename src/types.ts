@@ -1,3 +1,5 @@
+import { AxiosError } from 'axios';
+
 export type WeatherData = {
 	localTime: Date;
 	cityName: string;
@@ -11,3 +13,14 @@ export type WeatherData = {
 export type Unit = 'metric' | 'imperial';
 
 export type Location = { lat: number; lon: number };
+
+export type AxiosErrorWeather = AxiosError & {
+	response: {
+		data: {
+			error: {
+				code: number;
+				message: string;
+			};
+		};
+	};
+};
