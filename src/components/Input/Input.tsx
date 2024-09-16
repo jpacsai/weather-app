@@ -1,9 +1,7 @@
 'use client'
-import { ChangeEvent, FormEvent, MouseEvent, useCallback, useState } from 'react'
-
+import { ChangeEvent, useCallback, useState } from 'react'
 import styled from "styled-components"
 import { InputProps } from "./Input.types"
-import { Unit } from '@/types'
 
 const InputContainer = styled.form`
   display: flex;
@@ -19,6 +17,9 @@ const InputArea = styled.input`
   border-radius: 5px;
   color: black;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  &:disabled {
+    background-color: #c4c4c4;
+  }
 `
 
 const SubmitButton = styled.button`
@@ -29,10 +30,16 @@ const SubmitButton = styled.button`
   padding: 10px;
   color: white;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  width: 70px;
+  text-align: center;
+
+  &:disabled {
+    background-color: #9E9E9E;
+  }
 `
 
 const LocationSearchButton = styled.button`
-   all: unset;
+  all: unset;
   background-color: blue;
   border-radius: 5px;
   cursor: pointer;
@@ -41,9 +48,22 @@ const LocationSearchButton = styled.button`
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 `
 
-const Input = ({ onSubmit }: InputProps) => {
+const UnitButton = styled.button`
+  all: unset;
+  background-color: blue;
+  border-radius: 5px;
+  cursor: pointer;
+  padding: 10px;
+  color: white;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+`
+
+const UnitButtonLabel = styled.span<{ isActive: boolean }>`
+  text-decoration: ${({ isActive }) => isActive ? 'underline' : 'initial'};
+`
+
+const Input = ({ onSubmit, unit, isLoading, onUnitChange }: InputProps) => {
   const [inputValue, setInputValue] = useState<string>('')
-  const [unit, setUnit] = useState<Unit>('metric')
 
   const handleInput = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value)
@@ -52,18 +72,22 @@ const Input = ({ onSubmit }: InputProps) => {
   // TODO: add event type
   const handleSubmit = useCallback((e: any) => {
     e.preventDefault()
-    // TODO: add unit to onSubmit
     onSubmit(inputValue, unit)
     setInputValue('')
   }, [inputValue, unit, onSubmit])
 
-  return (
+  const handleUnitChange = useCallback(() => {
+    onUnitChange(unit === 'metric' ? 'imperial' : 'metric')
+  }, [unit])
+
+  return (<>
     <InputContainer onSubmit={handleSubmit}>
-      <InputArea placeholder="Please type in city name .." value={inputValue} onChange={handleInput} />
-      <SubmitButton onClick={handleSubmit} type="submit">Search</SubmitButton>
+      <InputArea placeholder="Please type in city name .." value={inputValue} onChange={handleInput} disabled={isLoading} />
+      <SubmitButton onClick={handleSubmit} type="submit" disabled={isLoading || !inputValue}>{isLoading ? '...' : 'Search'}</SubmitButton>
       {/* // TODO: <LocationSearchButton>TODO allow location search</LocationSearchButton> */}
-      {/* // TODO: switch component for unit selection */}
     </InputContainer>
+    <UnitButton onClick={handleUnitChange}><UnitButtonLabel isActive={unit === 'metric'}>Metric</UnitButtonLabel> / <UnitButtonLabel isActive={unit === 'imperial'}>Imperial</UnitButtonLabel></UnitButton>
+  </>
   )
 }
 

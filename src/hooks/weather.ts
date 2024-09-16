@@ -1,4 +1,4 @@
-import { AxiosErrorWeather, Unit, WeatherData } from '@/types';
+import { AxiosErrorWeather, MultiUnit, Unit, WeatherData } from '@/types';
 import axios from 'axios';
 import { useCallback, useMemo, useState } from 'react';
 
@@ -24,7 +24,7 @@ type ApiResponse = {
 
 export const useWeatherData = () => {
 	const [data, setData] = useState<WeatherData | null>(null);
-	const [isLoading, setIsLoading] = useState(false);
+	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [error, setError] = useState<string | null>(null);
 
 	const fetch = useCallback(async (q: string, unit: Unit = 'metric') => {
@@ -47,12 +47,17 @@ export const useWeatherData = () => {
 		setData({
 			localTime: new Date(response.location.localtime),
 			cityName: response.location.name,
-			temperature:
-				unit === 'metric' ? response.current.temp_c.toFixed(1) + ' °C' : response.current.temp_f.toFixed(1) + ' °F',
+			temperature: {
+				imperial: response.current.temp_f.toFixed(1) + ' °F',
+				metric: response.current.temp_c.toFixed(1) + ' °C'
+			},
 			description: response.current.condition.text,
 			icon: response.current.condition.icon,
 			humidity: response.current.humidity + '%',
-			windSpeed: unit === 'metric' ? response.current.wind_kph + ' km/h' : response.current.wind_mph.toFixed(1) + ' mph'
+			windSpeed: {
+				imperial: response.current.wind_mph.toFixed(1) + ' mph',
+				metric: response.current.wind_kph + ' km/h'
+			}
 		});
 	}, []);
 

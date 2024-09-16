@@ -3,14 +3,19 @@ import { AxiosError } from 'axios';
 export type WeatherData = {
 	localTime: Date;
 	cityName: string;
-	temperature: string;
+	temperature: MultiUnit;
 	description: string;
 	icon: string;
 	humidity: string;
-	windSpeed: string;
+	windSpeed: MultiUnit;
 };
 
-export type Unit = 'metric' | 'imperial';
+export type MultiUnit = {
+	metric: string;
+	imperial: string;
+};
+
+export type Unit = keyof MultiUnit;
 
 export type Location = { lat: number; lon: number };
 

@@ -1,5 +1,6 @@
 import styled from "styled-components"
 import { ContentProps } from "./Content.types"
+import Loading from "@/app/loading"
 
 const ContentContainer = styled.div`
   display: flex;
@@ -48,15 +49,16 @@ const Icon = styled.img`
   justify-self: center;
 `
 
-const Content = ({ weather }: ContentProps) => {
+const Content = ({ weather, unit, isLoading }: ContentProps) => {
+  if (isLoading) return (<Loading />)
   if (!weather) return;
   const { cityName, windSpeed, temperature, description, icon, humidity } = weather
   return (<ContentContainer>
     <City>{cityName}</City>
     <Details>
       <div>
-        <Temperature>Temperature: {temperature}</Temperature>
-        <Wind>Wind speed: {windSpeed}</Wind>
+        <Temperature>Temperature: {temperature[unit]}</Temperature>
+        <Wind>Wind speed: {windSpeed[unit]}</Wind>
         <Humidity>Humidity: {humidity}</Humidity>
       </div>
 
