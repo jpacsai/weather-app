@@ -2,7 +2,7 @@ import { AxiosErrorWeather, MultiUnit, Unit, WeatherData } from '@/types';
 import axios from 'axios';
 import { useCallback, useMemo, useState } from 'react';
 
-const key = '2f69cc6a582d4d8fb00205327240409';
+const key = 'b348f0df35504d608ef82554241809';
 
 type ApiResponse = {
 	location: {
@@ -27,7 +27,7 @@ export const useWeatherData = () => {
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [error, setError] = useState<string | null>(null);
 
-	const fetch = useCallback(async (q: string, unit: Unit = 'metric') => {
+	const fetch = useCallback(async (q: string) => {
 		setError(null);
 		setIsLoading(true);
 		const { data: response } = await axios

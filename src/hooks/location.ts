@@ -8,7 +8,7 @@ export const useLocation = () => {
 
 	const fetch = useCallback(() => {
 		if (!navigator.geolocation) return setError('Your browser does not support fetching your location');
-
+		setError(null);
 		setIsLoading(true);
 		navigator.geolocation.getCurrentPosition(
 			(position) => {

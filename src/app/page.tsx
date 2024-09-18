@@ -5,8 +5,9 @@ import Input from "@/components/Input/Input";
 import Content from "@/components/Content/Content";
 import styled from "styled-components";
 import { useWeatherData } from "@/hooks/weather";
+import { useLocation } from "@/hooks/location";
 import Error from "@/components/Error/Error";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Unit } from "@/types";
 
 const Container = styled.div`
@@ -19,16 +20,23 @@ const Container = styled.div`
 
 export default function Home() {
   const { fetch, isLoading, data, error } = useWeatherData();
+  const { fetch: fetchLocation, data: location, isLoading: isLocationLoading, error: locationError } = useLocation();
+
   const [unit, setUnit] = useState<Unit>('metric')
 
-  // TODO: display loading on UI eg. Content
+  useEffect(() => {
+    if (location) {
+      fetch(`${location.lat},${location.lon}`)
+    }
+  }, [location, fetch])
+
   return (
     <main className={styles.main}>
       <Container>
-        <Input onSubmit={fetch} isLoading={isLoading} unit={unit} onUnitChange={(unit) => setUnit(unit)} />
-        <Content weather={data} isLoading={isLoading} unit={unit} />
+        <Input onSubmit={fetch} fetchLocation={fetchLocation} isLoading={isLoading} isLocationLoading={isLocationLoading} unit={unit} onUnitChange={(unit) => setUnit(unit)} />
+        <Content weather={data} isLoading={isLoading} isLocationLoading={isLocationLoading} unit={unit} />
       </Container>
-      <Error error={error} />
+      <Error error={error || locationError} />
     </main>
   );
 }

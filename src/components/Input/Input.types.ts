@@ -1,8 +1,10 @@
-import { Unit } from '@/types';
+import { Location, Unit } from '@/types';
 
 export type InputProps = {
 	isLoading: boolean;
+	isLocationLoading: boolean;
 	unit: Unit;
-	onSubmit: (value: string, unit: Unit) => void;
+	onSubmit: (value: string) => void;
+	fetchLocation: () => void;
 	onUnitChange: (unit: Unit) => void;
 };

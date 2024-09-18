@@ -1,13 +1,27 @@
 'use client'
-import { ChangeEvent, useCallback, useState } from 'react'
+import { ChangeEvent, useCallback, useEffect, useState } from 'react'
 import styled from "styled-components"
 import { InputProps } from "./Input.types"
+import { useLocation } from '@/hooks/location'
 
-const InputContainer = styled.form`
+const InputContainer = styled.div`
   display: flex;
+  flex-direction: column;
   gap: 10px;
   width: 100%;
 `
+
+const InputForm = styled.form`
+  display: flex;
+  gap: 10px;
+`
+
+const OptionsContainer = styled.div`
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+`
+
 const InputArea = styled.input`
   background-color: white;
   flex: 1;
@@ -62,7 +76,7 @@ const UnitButtonLabel = styled.span<{ isActive: boolean }>`
   text-decoration: ${({ isActive }) => isActive ? 'underline' : 'initial'};
 `
 
-const Input = ({ onSubmit, unit, isLoading, onUnitChange }: InputProps) => {
+const Input = ({ onSubmit, fetchLocation, unit, isLoading, isLocationLoading, onUnitChange }: InputProps) => {
   const [inputValue, setInputValue] = useState<string>('')
 
   const handleInput = useCallback((e: ChangeEvent<HTMLInputElement>) => {
@@ -72,7 +86,7 @@ const Input = ({ onSubmit, unit, isLoading, onUnitChange }: InputProps) => {
   // TODO: add event type
   const handleSubmit = useCallback((e: any) => {
     e.preventDefault()
-    onSubmit(inputValue, unit)
+    onSubmit(inputValue)
     setInputValue('')
   }, [inputValue, unit, onSubmit])
 
@@ -81,12 +95,16 @@ const Input = ({ onSubmit, unit, isLoading, onUnitChange }: InputProps) => {
   }, [unit])
 
   return (<>
-    <InputContainer onSubmit={handleSubmit}>
-      <InputArea placeholder="Please type in city name .." value={inputValue} onChange={handleInput} disabled={isLoading} />
-      <SubmitButton onClick={handleSubmit} type="submit" disabled={isLoading || !inputValue}>{isLoading ? '...' : 'Search'}</SubmitButton>
-      {/* // TODO: <LocationSearchButton>TODO allow location search</LocationSearchButton> */}
+    <InputContainer>
+      <InputForm onSubmit={handleSubmit}>
+        <InputArea placeholder="Please type in city name .." value={inputValue} onChange={handleInput} disabled={isLoading || isLocationLoading} />
+        <SubmitButton onClick={handleSubmit} type="submit" disabled={isLoading || !inputValue}>{isLoading ? '...' : 'Search'}</SubmitButton>
+      </InputForm>
+      <OptionsContainer>
+        <UnitButton onClick={handleUnitChange}><UnitButtonLabel isActive={unit === 'metric'}>Metric</UnitButtonLabel> / <UnitButtonLabel isActive={unit === 'imperial'}>Imperial</UnitButtonLabel></UnitButton>
+        <LocationSearchButton onClick={fetchLocation}>{isLocationLoading ? '...' : 'Use my location'}</LocationSearchButton>
+      </OptionsContainer>
     </InputContainer>
-    <UnitButton onClick={handleUnitChange}><UnitButtonLabel isActive={unit === 'metric'}>Metric</UnitButtonLabel> / <UnitButtonLabel isActive={unit === 'imperial'}>Imperial</UnitButtonLabel></UnitButton>
   </>
   )
 }

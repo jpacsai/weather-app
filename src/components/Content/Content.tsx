@@ -1,6 +1,7 @@
 import styled from "styled-components"
 import { ContentProps } from "./Content.types"
 import Loading from "@/app/loading"
+import { useLocation } from "@/hooks/location"
 
 const ContentContainer = styled.div`
   display: flex;
@@ -49,8 +50,8 @@ const Icon = styled.img`
   justify-self: center;
 `
 
-const Content = ({ weather, unit, isLoading }: ContentProps) => {
-  if (isLoading) return (<Loading />)
+const Content = ({ weather, unit, isLoading, isLocationLoading }: ContentProps) => {
+  if (isLoading || isLocationLoading) return (<Loading />)
   if (!weather) return;
   const { cityName, windSpeed, temperature, description, icon, humidity } = weather
   return (<ContentContainer>
